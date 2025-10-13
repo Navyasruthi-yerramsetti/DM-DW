@@ -1,0 +1,48 @@
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+import numpy as np
+
+# Load Iris dataset
+iris = load_iris()
+X = pd.DataFrame(iris.data, columns=iris.feature_names)
+y = pd.Series(iris.target)
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Implement ZeroR - find the most frequent class in training set
+from collections import Counter
+
+most_common_class = Counter(y_train).most_common(1)[0][0]
+
+# Predict the majority class for all test samples
+y_pred = [most_common_class] * len(y_test)
+
+# Evaluate
+print("Most frequent class in training set:", iris.target_names[most_common_class])
+print("\nClassification Report:\n")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
+
+output:
+Most frequent class in training set: versicolor
+
+Classification Report:
+
+              precision    recall  f1-score   support
+
+      setosa       0.00      0.00      0.00        19
+  versicolor       0.29      1.00      0.45        13
+   virginica       0.00      0.00      0.00        13
+
+    accuracy                           0.29        45
+   macro avg       0.10      0.33      0.15        45
+weighted avg       0.08      0.29      0.13        45
+
+/usr/local/lib/python3.12/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.12/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.12/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
